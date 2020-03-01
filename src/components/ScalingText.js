@@ -23,10 +23,6 @@ class ScalingText extends React.Component {
     )
   }
 
-  componentDidMount() {
-    let parent = this.container.current.parentNode;
-  }
-
   componentDidUpdate() {
     const scale = this.state.scale;
     const node = this.container.current;
