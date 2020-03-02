@@ -13,9 +13,13 @@ class ScalingText extends React.Component {
   }
 
   render() {
+    let componentClass = '';
+    componentClass += styles.root ? ' ' + styles.root : '';
+    componentClass += this.props.className ? ' ' + this.props.className : '';
+    
     return (
       <div 
-        className={styles.root + ' ' + this.props.className}
+        className={componentClass}
         ref={this.container}
         style={{ transform: `scale(${this.state.scale})` }}>
         {this.props.children}
