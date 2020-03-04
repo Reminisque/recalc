@@ -6,11 +6,11 @@ import styles from './Recalc.module.css';
 
 class Recalc extends React.Component {
   MAX_INPUT_DIGITS = 16;
-  OPERATORS = {
-    '+': "Add",
-    '-': "Subtract",
-    '*': "Multiply",
-    '/': "Divide"
+  OPERATIONS = {
+    '+': (a,b) => { return a + b },
+    '-': (a,b) => { return a - b },
+    '*': (a,b) => { return a * b },
+    '/': (a,b) => { return a / b }
   };
 
   constructor() {
@@ -45,6 +45,15 @@ class Recalc extends React.Component {
         <RecalcButton
           inputFunc={this.inputOperator}
           inputVal='+'>+</RecalcButton>
+        <RecalcButton
+          inputFunc={this.inputOperator}
+          inputVal='-'>-</RecalcButton>
+        <RecalcButton
+          inputFunc={this.inputOperator}
+          inputVal='*'>*</RecalcButton>
+        <RecalcButton
+          inputFunc={this.inputOperator}
+          inputVal='/'>/</RecalcButton>
       </div>
     );
   }
@@ -64,15 +73,37 @@ class Recalc extends React.Component {
   }
 
   inputOperator = (operator) => {
-    this.setState({ 
-      operandValue: this.state.displayValue,
-      waitingOperand: true,
-      operator: operator 
-    });
+    if (this.state.waitingOperand) {
+      this.setState({
+        operator: operator
+      });
+    } else if (this.state.operandValue === '') {
+      this.setState({
+        operandValue: this.state.displayValue,
+        waitingOperand: true,
+        operator: operator
+      });
+    } else {
+      const result = this.calculate();
+      this.setState({
+        displayValue: result,
+        operandValue: result,
+        waitingOperand: true,
+        operator: operator
+      });
+    }
+  
   }
 
   calculate = () => {
-    console.log("Calculate not implemented yet");
+    const { displayValue, operandValue, operator } = this.state;
+    const result = this.OPERATIONS[operator](
+      parseFloat(operandValue), 
+      parseFloat(displayValue)
+    ).toString();
+    
+    return result.length > this.MAX_INPUT_DIGITS + 1 ?
+      result.slice(0, this.MAX_INPUT_DIGITS + 1) : result;
   }
 }
 
