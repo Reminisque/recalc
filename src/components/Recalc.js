@@ -18,7 +18,7 @@ class Recalc extends React.Component {
 
     this.state = {
       displayValue: '0',
-      operandValue: '0',
+      operandValue: '',
       waitingOperand: false,
       operator: null
     }
@@ -55,7 +55,6 @@ class Recalc extends React.Component {
     if (this.state.waitingOperand) {
       this.setState({
         waitingOperand: false, 
-        operandValue: displayValue,
         displayValue: digit
       });
     } else if (this.state.displayValue.length < this.MAX_INPUT_DIGITS) {
@@ -65,7 +64,11 @@ class Recalc extends React.Component {
   }
 
   inputOperator = (operator) => {
-    this.setState({ waitingOperand: true, operator: operator });
+    this.setState({ 
+      operandValue: this.state.displayValue,
+      waitingOperand: true,
+      operator: operator 
+    });
   }
 
   calculate = () => {
