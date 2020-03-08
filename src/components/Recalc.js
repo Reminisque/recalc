@@ -116,8 +116,7 @@ class Recalc extends React.Component {
   }
 
   inputEqual = () => {
-    const { displayValue, operandValue, secondValue,
-       waitingOperand, operator, expressionEnd } = this.state;
+    const { displayValue, operandValue, secondValue, operator } = this.state;
 
     if (!operator) {
       this.setState({ 
