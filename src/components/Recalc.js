@@ -12,24 +12,35 @@ class Recalc extends React.Component {
     '*': (a,b) => { return a * b },
     '/': (a,b) => { return a / b }
   };
+  DEBUG_STATE = false;
 
   constructor() {
     super();
 
     this.state = {
-      displayValue: '0',
+      displayValue: "0",
       operandValue: '',
+      secondValue: '',
       waitingOperand: false,
-      operator: null
+      operator: null,
+      expressionEnd: false
     }
   }
 
   render() {
     const operation = this.state.operandValue + 
-      (this.state.operator ? ' ' + this.state.operator : '');
+      (this.state.operator ? ' ' + this.state.operator : '') + 
+      (this.state.secondValue ? ' ' + this.state.secondValue : '') +
+      (this.state.expressionEnd ? ' =' : '');
 
     return (
       <div className={styles.root}>
+        {
+          this.DEBUG_STATE ?
+            <div className={styles.debug}>
+              {JSON.stringify(this.state, null, 2)}
+            </div> : null
+        }
         <RecalcDisplay
           displayValue={this.state.displayValue}
           operation={operation}>
@@ -54,6 +65,8 @@ class Recalc extends React.Component {
         <RecalcButton
           inputFunc={this.inputOperator}
           inputVal='/'>/</RecalcButton>
+        <RecalcButton 
+          inputFunc={this.inputEqual}>=</RecalcButton>
       </div>
     );
   }
@@ -66,6 +79,9 @@ class Recalc extends React.Component {
         waitingOperand: false, 
         displayValue: digit
       });
+    } else if (this.state.expressionEnd) {
+      this.clear();
+      this.setState({ displayValue: digit });
     } else if (this.state.displayValue.length < this.MAX_INPUT_DIGITS) {
       const newValue = displayValue === '0' ? digit : displayValue + digit;
       this.setState({ displayValue: newValue });
@@ -73,37 +89,75 @@ class Recalc extends React.Component {
   }
 
   inputOperator = (operator) => {
-    if (this.state.waitingOperand) {
+    const { displayValue, operandValue, waitingOperand, expressionEnd } = this.state;
+
+    if (operandValue === '') {
       this.setState({
-        operator: operator
+        operandValue: displayValue
       });
-    } else if (this.state.operandValue === '') {
+    } else if (expressionEnd) {
       this.setState({
-        operandValue: this.state.displayValue,
-        waitingOperand: true,
-        operator: operator
+        operandValue: displayValue,
+        secondValue: ''
       });
-    } else {
-      const result = this.calculate();
+    } else if (!waitingOperand) {
+      const result = this.calculate(operandValue, displayValue);
       this.setState({
         displayValue: result,
-        operandValue: result,
-        waitingOperand: true,
-        operator: operator
+        operandValue: result
       });
     }
-  
+
+    this.setState({ 
+      operator: operator, 
+      waitingOperand: true, 
+      expressionEnd: false 
+    });
   }
 
-  calculate = () => {
-    const { displayValue, operandValue, operator } = this.state;
-    const result = this.OPERATIONS[operator](
-      parseFloat(operandValue), 
-      parseFloat(displayValue)
-    ).toString();
-    
-    return result.length > this.MAX_INPUT_DIGITS + 1 ?
-      result.slice(0, this.MAX_INPUT_DIGITS + 1) : result;
+  inputEqual = () => {
+    const { displayValue, operandValue, secondValue,
+       waitingOperand, operator, expressionEnd } = this.state;
+
+    if (!operator) {
+      this.setState({ 
+        operandValue: displayValue
+      });
+    } else if (secondValue === '') {
+      const result = this.calculate(operandValue, displayValue);
+      this.setState({
+        displayValue: result,
+        secondValue: displayValue,
+      })
+    } else {
+      const result = this.calculate(displayValue, secondValue);
+      this.setState({
+        displayValue: result,
+        operandValue: displayValue
+      });
+    }
+
+    this.setState({ expressionEnd: true, waitingOperand: false });
+  }
+
+  calculate = (a=1, b=1) => {
+    const { operator } = this.state;
+
+    return this.OPERATIONS[operator](
+      parseFloat(a), 
+      parseFloat(b)
+    ).toString();    
+  }
+
+  clear = () => {
+    this.setState({
+      displayValue: '0',
+      operandValue: '',
+      secondValue: '',
+      waitingOperand: false,
+      operator: '',
+      expressionEnd: false,
+    });
   }
 }
 

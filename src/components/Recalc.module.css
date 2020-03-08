@@ -5,3 +5,8 @@
   font-size: 4em;
   box-shadow: 4px 4px 8px 0px rgba(0,0,0,0.3);
 }
+
+.debug {
+  font-size: 16px;
+  white-space: pre;
+}
