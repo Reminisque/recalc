@@ -12,8 +12,6 @@ class RecalcButton extends React.Component {
   }
 
   inputFunc = (val) => this.props.inputFunc(val)
-  
-  
 }
 
 export default RecalcButton;

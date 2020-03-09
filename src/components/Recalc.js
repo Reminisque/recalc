@@ -45,28 +45,55 @@ class Recalc extends React.Component {
           displayValue={this.state.displayValue}
           operation={operation}>
         </RecalcDisplay>
-        {
-          Array.from(Array(10)).map((_, num) => 
-            <RecalcButton 
-              key={num} 
-              inputFunc={this.inputDigit}
-              inputVal={`${num}`}>{num}</RecalcButton>
-          )
-        }
-        <RecalcButton
-          inputFunc={this.inputOperator}
-          inputVal='+'>+</RecalcButton>
-        <RecalcButton
-          inputFunc={this.inputOperator}
-          inputVal='-'>-</RecalcButton>
-        <RecalcButton
-          inputFunc={this.inputOperator}
-          inputVal='*'>*</RecalcButton>
+
+        <RecalcButton 
+          inputFunc={this.inputDigit}
+          inputVal='7'>7</RecalcButton>
+        <RecalcButton 
+          inputFunc={this.inputDigit}
+          inputVal='8'>8</RecalcButton>
+        <RecalcButton 
+          inputFunc={this.inputDigit}
+          inputVal='9'>9</RecalcButton>
         <RecalcButton
           inputFunc={this.inputOperator}
           inputVal='/'>/</RecalcButton>
         <RecalcButton 
+          inputFunc={this.inputDigit}
+          inputVal='4'>4</RecalcButton>
+        <RecalcButton 
+          inputFunc={this.inputDigit}
+          inputVal='5'>5</RecalcButton>
+        <RecalcButton 
+          inputFunc={this.inputDigit}
+          inputVal='6'>6</RecalcButton>
+        <RecalcButton
+          inputFunc={this.inputOperator}
+          inputVal='*'>*</RecalcButton>
+        <RecalcButton 
+          inputFunc={this.inputDigit}
+          inputVal='1'>1</RecalcButton>
+        <RecalcButton 
+          inputFunc={this.inputDigit}
+          inputVal='2'>2</RecalcButton>
+        <RecalcButton 
+          inputFunc={this.inputDigit}
+          inputVal='3'>3</RecalcButton>
+        <RecalcButton
+          inputFunc={this.inputOperator}
+          inputVal='-'>-</RecalcButton>
+        <RecalcButton
+          inputFunc={this.clear}>C</RecalcButton>
+        <RecalcButton 
+          inputFunc={this.inputDigit}
+          inputVal='0'>0</RecalcButton>
+        <RecalcButton 
           inputFunc={this.inputEqual}>=</RecalcButton>
+        <RecalcButton
+          inputFunc={this.inputOperator}
+          inputVal='+'>+</RecalcButton>
+        <RecalcButton
+          inputFunc={this.toggleSign}>+/-</RecalcButton>
       </div>
     );
   }
@@ -156,6 +183,15 @@ class Recalc extends React.Component {
       waitingOperand: false,
       operator: '',
       expressionEnd: false,
+    });
+  }
+
+  toggleSign = () => {
+    const { displayValue } = this.state;
+
+    this.setState({
+      displayValue: (-1 * parseFloat(displayValue)).toString(),
+      waitingOperand: false
     });
   }
 }
