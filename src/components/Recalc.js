@@ -83,19 +83,21 @@ class Recalc extends React.Component {
           inputFunc={this.inputOperator}
           inputVal='-'>-</RecalcButton>
         <RecalcButton
-          inputFunc={this.clear}>C</RecalcButton>
+          inputFunc={this.toggleSign}>+/-</RecalcButton>
         <RecalcButton 
           inputFunc={this.inputDigit}
           inputVal='0'>0</RecalcButton>
-        <RecalcButton 
-          inputFunc={this.inputEqual}>=</RecalcButton>
+        <RecalcButton
+          inputFunc={this.inputDecimal}>.</RecalcButton>
         <RecalcButton
           inputFunc={this.inputOperator}
           inputVal='+'>+</RecalcButton>
+        <RecalcButton 
+          inputFunc={this.inputEqual}>=</RecalcButton>
         <RecalcButton
-          inputFunc={this.toggleSign}>+/-</RecalcButton>
+          inputFunc={this.clear}>C</RecalcButton>
         <RecalcButton
-          inputFunc={this.inputDecimal}>.</RecalcButton>
+          inputFunc={this.backspace}>BACK</RecalcButton>
       </div>
     );
   }
@@ -124,7 +126,6 @@ class Recalc extends React.Component {
     const { displayValue, waitingOperand, expressionEnd} = this.state;
     const displayLength = displayValue.length;
     const noDecimal = displayValue.search('/\./') === -1;
-    console.log(noDecimal);
     
     if (waitingOperand) {
       this.setState({
@@ -191,6 +192,15 @@ class Recalc extends React.Component {
     this.setState({ expressionEnd: true, waitingOperand: false });
   }
 
+  toggleSign = () => {
+    const { displayValue } = this.state;
+
+    this.setState({
+      displayValue: (-1 * parseFloat(displayValue)).toString(),
+      waitingOperand: false
+    });
+  }
+
   calculate = (a=1, b=1) => {
     const { operator } = this.state;
 
@@ -198,6 +208,22 @@ class Recalc extends React.Component {
       parseFloat(a), 
       parseFloat(b)
     ).toString();    
+  }
+
+  backspace = () => {
+    const { displayValue, waitingOperand, expressionEnd } = this.state;
+    const displayLength = displayValue.length;
+    if (waitingOperand || expressionEnd) {
+      return
+    }
+
+    if (displayLength > 1) {
+      this.setState({ 
+        displayValue: displayValue.slice(0, displayLength - 1)
+      });
+    } else {
+      this.setState({ displayValue: '0' });
+    }
   }
 
   clear = () => {
@@ -208,15 +234,6 @@ class Recalc extends React.Component {
       waitingOperand: false,
       operator: '',
       expressionEnd: false,
-    });
-  }
-
-  toggleSign = () => {
-    const { displayValue } = this.state;
-
-    this.setState({
-      displayValue: (-1 * parseFloat(displayValue)).toString(),
-      waitingOperand: false
     });
   }
 }
