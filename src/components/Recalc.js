@@ -94,23 +94,48 @@ class Recalc extends React.Component {
           inputVal='+'>+</RecalcButton>
         <RecalcButton
           inputFunc={this.toggleSign}>+/-</RecalcButton>
+        <RecalcButton
+          inputFunc={this.inputDecimal}>.</RecalcButton>
       </div>
     );
   }
 
   inputDigit = (digit) => {
-    const { displayValue } = this.state;
+    const { displayValue, waitingOperand, expressionEnd } = this.state;
+    const displayLength = displayValue.length;
+    const hasDecimal = displayValue.search('/\./') !== -1;
+    const maxLength = this.MAX_INPUT_DIGITS + hasDecimal;
 
-    if (this.state.waitingOperand) {
+    if (waitingOperand) {
       this.setState({
         waitingOperand: false, 
         displayValue: digit
       });
-    } else if (this.state.expressionEnd) {
+    } else if (expressionEnd) {
       this.clear();
       this.setState({ displayValue: digit });
-    } else if (this.state.displayValue.length < this.MAX_INPUT_DIGITS) {
+    } else if (displayLength < maxLength) {
       const newValue = displayValue === '0' ? digit : displayValue + digit;
+      this.setState({ displayValue: newValue });
+    }
+  }
+
+  inputDecimal = () => {
+    const { displayValue, waitingOperand, expressionEnd} = this.state;
+    const displayLength = displayValue.length;
+    const noDecimal = displayValue.search('/\./') === -1;
+    console.log(noDecimal);
+    
+    if (waitingOperand) {
+      this.setState({
+        waitingOperand: false,
+        displayValue: '0.'
+      });
+    } else if (expressionEnd) {
+      this.clear();
+      this.setState({ displayValue: '0.' });
+    } else if (noDecimal && displayLength < this.MAX_INPUT_DIGITS) {
+      const newValue = displayValue + '.';
       this.setState({ displayValue: newValue });
     }
   }
