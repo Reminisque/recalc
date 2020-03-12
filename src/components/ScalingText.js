@@ -13,9 +13,9 @@ class ScalingText extends React.Component {
   }
 
   render() {
-    let componentClass = '';
-    componentClass += styles.root ? ' ' + styles.root : '';
-    componentClass += this.props.className ? ' ' + this.props.className : '';
+    const { className } = this.props;
+    const componentClass = styles.root
+      + (className ? ' ' + className : '');
     
     return (
       <div 

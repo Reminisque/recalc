@@ -3,9 +3,12 @@ import styles from './RecalcButton.module.css';
 
 class RecalcButton extends React.Component {
   render() {
-    const { inputVal } = this.props;
+    const { className, inputVal } = this.props;
+    const componentClass = styles.root
+      + (className ? ' ' + className : '');
+
     return (
-      <button className={styles.root} onClick={() => this.inputFunc(inputVal)}>
+      <button className={componentClass} onClick={() => this.inputFunc(inputVal)}>
         {this.props.children}
       </button>
     );

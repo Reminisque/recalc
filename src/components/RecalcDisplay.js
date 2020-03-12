@@ -4,10 +4,12 @@ import styles from './RecalcDisplay.module.css';
 
 class RecalcDisplay extends React.Component {
   render() {
-    const { displayValue, operation } = this.props;
+    const { className, displayValue, operation } = this.props;
+    const componentClass = styles.root
+      + (className ? ' ' + className : '');
     
     return (
-      <div className={styles.root}>
+      <div className={componentClass}>
         <ScalingText className={styles.operationText}>{operation}</ScalingText>
         <ScalingText className={styles.currentText}>{displayValue}</ScalingText>
       </div>

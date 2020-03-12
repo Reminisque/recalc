@@ -28,13 +28,22 @@ class Recalc extends React.Component {
   }
 
   render() {
-    const operation = this.state.operandValue + 
-      (this.state.operator ? ' ' + this.state.operator : '') + 
-      (this.state.secondValue ? ' ' + this.state.secondValue : '') +
-      (this.state.expressionEnd ? ' =' : '');
+    const { 
+      className,
+      operandValue,
+      secondValue,
+      operator,
+      expressionEnd 
+    } = this.state;
+    const componentClass = styles.root 
+      + (className ? ' ' + className : '');
+    const operation = operandValue
+      + (operator ? ' ' + operator : '')
+      + (secondValue ? ' ' + secondValue : '')
+      + (expressionEnd ? ' =' : '');
 
     return (
-      <div className={styles.root}>
+      <div className={componentClass}>
         {
           this.DEBUG_STATE ?
             <div className={styles.debug}>
