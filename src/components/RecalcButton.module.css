@@ -1,10 +1,9 @@
 .root {
+  display: block;
   height: 96px;
   width: 96px;
-  padding: 8px;
-  margin: 8px;
   background: rgb(245, 150, 137);
   border: 0;
   cursor: pointer;
-  font-size: 1.5rem;
+  font-size: 1.75rem;
 }
