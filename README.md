@@ -2,6 +2,8 @@
 
 Simple calculator app made with React
 
+Demo site: https://reminisque.github.io/recalc/
+
 ![Recalc Demo](recalc-demo.gif "Recalc demo")
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
